@@ -5,6 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/BackAtHome.iml" filepath="$PROJECT_DIR$/.idea/modules/BackAtHome.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/BackAtHome.lib.main.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/BackAtHome.lib.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/BackAtHome.lib.test.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/BackAtHome.lib.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/lib.BackAtHome.lib.main.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/lib.BackAtHome.lib.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/lib.BackAtHome.lib.test.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/lib.BackAtHome.lib.test.iml" />
     </modules>
   </component>
 </project>

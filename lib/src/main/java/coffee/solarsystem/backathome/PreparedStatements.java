@@ -11,6 +11,7 @@ public class PreparedStatements {
   private PreparedStatement _deleteHome;
   private PreparedStatement _setHome;
   private PreparedStatement _getAreaHomes;
+  private PreparedStatement _updateCompatiblity;
 
   private PreparedStatement _getPlayerHomes;
   private Logger logger;
@@ -39,6 +40,12 @@ public class PreparedStatements {
 
       _getPlayerHomes = conn.prepareStatement(
               "SELECT * FROM homes WHERE UUID = ?");
+
+      _updateCompatiblity = conn.prepareStatement(
+              "ALTER TABLE homes ADD COLUMN IF NOT EXISTS yaw FLOAT DEFAULT -1.0;" +
+                      "ALTER TABLE homes ADD COLUMN IF NOT EXISTS pitch FLOAT DEFAULT - 1.0);" +
+                      "ALTER TABLE homes ADD COLUMN IF NOT EXISTS server VARCHAR(255) DEFAULT 'DEFAULT');"
+      );
 
     } catch (SQLException e) {
       logger.log(Level.SEVERE, "Failed to init prepared", e);
