@@ -51,7 +51,13 @@ public class zPHomes extends JavaPlugin {
 
       stmt = conn.createStatement();
       stmt.execute(
-              "CREATE TABLE IF NOT EXISTS homes (ID int PRIMARY KEY NOT NULL AUTO_INCREMENT, UUID varchar(255), Name varchar(255), world varchar(255), x double, y double, z double)");
+
+
+
+
+
+              "CREATE TABLE IF NOT EXISTS homes (ID int PRIMARY KEY NOT NULL AUTO_INCREMENT, UUID varchar(255), Name varchar(255), world varchar(255), x double, y double, z double, yaw float DEFAULT - 1.0, pitch float DEFAULT - 1.0, server varchar(255) DEFAULT 'DEFAULT')");
+
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
@@ -94,14 +100,7 @@ public class zPHomes extends JavaPlugin {
     // version below 0.4.0
     if (semVerCmp(new int[]{0, 4, 0}, lastVersion)) {
       getLogger().info("Adding yaw, pitch, and server columns");
-      stmt.execute(
-              "ALTER TABLE homes ADD COLUMN IF NOT EXISTS yaw FLOAT DEFAULT -1.0;");
-
-      stmt.execute(
-              "ALTER TABLE homes ADD COLUMN IF NOT EXISTS pitch FLOAT DEFAULT - 1.0");
-
-      stmt.execute(
-              "ALTER TABLE homes ADD COLUMN IF NOT EXISTS server VARCHAR(255) DEFAULT 'DEFAULT' ");
+      prepared.updateCompatiblity();
       getLogger().info("Done!");
     }
 

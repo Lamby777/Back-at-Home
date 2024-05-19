@@ -74,6 +74,13 @@ public class PreparedStatements {
       zPHomes.skillIssue(e);
     }
   }
+  void updateCompatiblity() {
+    try {
+      _updateCompatiblity.executeQuery();
+    } catch (SQLException e) {
+      zPHomes.skillIssue(e);
+    }
+  }
 
   ResultSet homesWithName(String uuid, String home) throws SQLException {
     _homesWithName.setString(1, uuid);
