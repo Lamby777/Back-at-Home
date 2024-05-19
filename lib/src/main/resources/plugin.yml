@@ -1,9 +1,9 @@
 ## YAML Template.
 ---
 
-author: zP0
+author: III_zP0_III
 name: zPHomes
-version: 0.12.0
+version: 0.13.0
 load: POSTWORLD
 main: coffee.solarsystem.backathome.zPHomes
 database: true

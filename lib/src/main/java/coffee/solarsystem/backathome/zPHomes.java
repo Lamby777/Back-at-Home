@@ -51,12 +51,7 @@ public class zPHomes extends JavaPlugin {
 
       stmt = conn.createStatement();
       stmt.execute(
-
-
-
-
-
-              "CREATE TABLE IF NOT EXISTS homes (ID int PRIMARY KEY NOT NULL AUTO_INCREMENT, UUID varchar(255), Name varchar(255), world varchar(255), x double, y double, z double, yaw float DEFAULT - 1.0, pitch float DEFAULT - 1.0, server varchar(255) DEFAULT 'DEFAULT')");
+             "CREATE TABLE IF NOT EXISTS homes (ID int PRIMARY KEY NOT NULL AUTO_INCREMENT, UUID varchar(255), Name varchar(255), world varchar(255), x double, y double, z double, yaw float DEFAULT - 1.0, pitch float DEFAULT - 1.0, server varchar(255) DEFAULT 'DEFAULT')");
 
     } catch (SQLException e) {
       throw new RuntimeException(e);
@@ -85,7 +80,7 @@ public class zPHomes extends JavaPlugin {
             (firstEq && secondEq && (first[2] > second[2]));
   }
 
-  void updateBackwardsCompat() throws SQLException {
+  void updateBackwardsCompatibility() throws SQLException {
     String plVerStr = pdf.getVersion();
     int[] version = parseSemVer(plVerStr);
 
@@ -148,7 +143,7 @@ public class zPHomes extends JavaPlugin {
 
     // stuff to run when updating from older version
     try {
-      updateBackwardsCompat();
+      updateBackwardsCompatibility();
     } catch (SQLException e) {
       Logger.getLogger(zPHomes.class.getName())
               .log(
@@ -193,6 +188,7 @@ public class zPHomes extends JavaPlugin {
           player.sendMessage("Use '/newhome <name>' to only create a new home");
           player.sendMessage("Use '/sethome <name>' to create or update a home");
           player.sendMessage("Use '/delhome <name>' to delete a home");
+          player.sendMessage("homesmanager /homemanager help");
           return false;
 
         case "home":
@@ -211,6 +207,10 @@ public class zPHomes extends JavaPlugin {
                 cmdSearchHomes(player, pos);
               }
 
+            }
+            else if (args[0].equalsIgnoreCase("playerhomes")) {
+              cmdSearchHomesPlayer(player,args);
+
             } else if (args[0].equalsIgnoreCase("delhome")) {
               cmdDelHomeOther(player, args);
 
@@ -218,6 +218,7 @@ public class zPHomes extends JavaPlugin {
               player.sendMessage("/homemanager area 9 -> shows homes in a radius of 9");
               player.sendMessage("/homemanager delhome homename username -> deletes home");
               player.sendMessage("/homemanager tp username homename -> teleports to user home");
+              player.sendMessage("/homemanager playerhomes playername");
 
             } else if (args[0].equalsIgnoreCase("player")) {
               player.sendMessage("looking for homes: ");
@@ -322,39 +323,35 @@ public class zPHomes extends JavaPlugin {
     return true;
   }
 
-    boolean cmdSearchHomesPlayer(Player player, String[] args) {
-    if (2 > args.length && args.length > 1) {
+    void cmdSearchHomesPlayer(Player player, String[] args) {
+    if (args.length >= 2) {
       Player p = Bukkit.getOfflinePlayer(args[1]).getPlayer();
-      try {
-        ResultSet homes = prepared.getPlayerHomes(p.getUniqueId().toString());
+      if (p != null) {
+        try {
+          ResultSet homes = prepared.getPlayerHomes(p.getUniqueId().toString());
 
-        for(int a = 0; homes.next(); a++){
-          String UIhome = homes.getString("Name");
-          String UIhomeowner = Bukkit.getOfflinePlayer(UUID.fromString(homes.getString("UUID"))).getName();
+          for (int a = 0; homes.next(); a++) {
+            String UIhome = homes.getString("Name");
+            String UIhomeowner = Bukkit.getOfflinePlayer(UUID.fromString(homes.getString("UUID"))).getName();
 
-          TextComponent delHome = new TextComponent("[DEL]");
-          String delHomecmd = "/homemanager delhome " + UIhome + " " + UIhomeowner;
-          ClickEvent clickDelHome = new ClickEvent(ClickEvent.Action.RUN_COMMAND, delHomecmd);
-          delHome.setClickEvent(clickDelHome);
-          delHome.setColor(net.md_5.bungee.api.ChatColor.RED);
+            TextComponent delHome = new TextComponent("[DEL]");
+            String delHomecmd = "/homemanager delhome " + UIhome + " " + UIhomeowner;
+            ClickEvent clickDelHome = new ClickEvent(ClickEvent.Action.RUN_COMMAND, delHomecmd);
+            delHome.setClickEvent(clickDelHome);
+            delHome.setColor(net.md_5.bungee.api.ChatColor.RED);
 
-          TextComponent homeDelUI = new TextComponent(UIhome + " | " + UIhomeowner + " ");
+            TextComponent homeDelUI = new TextComponent(UIhome + " | " + UIhomeowner + " ");
 
-          TextComponent tpHome = new TextComponent("[teleport]");
-          String tpHomecmd = "/homemanager tp " + UIhomeowner + " " + UIhome;
-          ClickEvent clicktpHome = new ClickEvent(ClickEvent.Action.RUN_COMMAND, tpHomecmd);
-          tpHome.setClickEvent(clicktpHome);
-          tpHome.setColor(ChatColor.LIGHT_PURPLE.asBungee());
-          player.spigot().sendMessage(delHome, tpHome,  homeDelUI);
-        }
-      } catch (SQLException a){
-        player.sendMessage("no homes found");
-        Bukkit.getConsoleSender().sendMessage("error " + a.toString());
-      }
-    }
-
-    return true;
-  }
+            TextComponent tpHome = new TextComponent("[teleport]");
+            String tpHomecmd = "/homemanager tp " + UIhomeowner + " " + UIhome;
+            ClickEvent clicktpHome = new ClickEvent(ClickEvent.Action.RUN_COMMAND, tpHomecmd);
+            tpHome.setClickEvent(clicktpHome);
+            tpHome.setColor(ChatColor.LIGHT_PURPLE.asBungee());
+            player.spigot().sendMessage(delHome, tpHome, homeDelUI);
+          }
+        } catch (SQLException a) {
+          player.sendMessage("no homes found");
+          Bukkit.getConsoleSender().sendMessage("error " + a.toString());}}}}
   void cmdDelHomeOther(Player player, String[] args) {
     String homeName = args[1];
     String homeUUID = Bukkit.getOfflinePlayer(args[2]).getUniqueId().toString();

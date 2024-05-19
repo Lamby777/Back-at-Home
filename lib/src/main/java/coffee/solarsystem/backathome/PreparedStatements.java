@@ -42,9 +42,9 @@ public class PreparedStatements {
               "SELECT * FROM homes WHERE UUID = ?");
 
       _updateCompatiblity = conn.prepareStatement(
-              "ALTER TABLE homes ADD COLUMN IF NOT EXISTS yaw FLOAT DEFAULT -1.0;" +
-                      "ALTER TABLE homes ADD COLUMN IF NOT EXISTS pitch FLOAT DEFAULT - 1.0);" +
-                      "ALTER TABLE homes ADD COLUMN IF NOT EXISTS server VARCHAR(255) DEFAULT 'DEFAULT');"
+              "ALTER TABLE homes ADD COLUMN IF NOT EXISTS yaw FLOAT DEFAULT -1.0; " +
+                      "ALTER TABLE homes ADD COLUMN IF NOT EXISTS pitch FLOAT DEFAULT - 1.0; " +
+                      "ALTER TABLE homes ADD COLUMN IF NOT EXISTS server VARCHAR(255) DEFAULT 'DEFAULT';"
       );
 
     } catch (SQLException e) {
