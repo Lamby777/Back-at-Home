@@ -10,6 +10,7 @@ public class PreparedStatements {
   private PreparedStatement _homesSegment;
   private PreparedStatement _deleteHome;
   private PreparedStatement _setHome;
+  private PreparedStatement _getHomesAmount;
   private PreparedStatement _getAreaHomes;
   private PreparedStatement _updateCompatiblity;
 
@@ -34,6 +35,10 @@ public class PreparedStatements {
 
       _setHome = conn.prepareStatement(
           "INSERT INTO homes (UUID,Name,world,x,y,z,yaw,pitch,server) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+      _getHomesAmount = conn.prepareStatement(
+              "SELECT COUNT(*) from homes where UUID = ?"
+      );
 
       _getAreaHomes = conn.prepareStatement(
               "SELECT * FROM homes WHERE world = ? AND x > ? AND x < ? AND z > ? AND z < ?");
@@ -105,6 +110,10 @@ public class PreparedStatements {
     return _getAreaHomes.executeQuery();
   }
 
+  ResultSet getHomesAmount(String uuid) throws SQLException {
+    _getHomesAmount.setString(1, uuid);
+    return _getHomesAmount.executeQuery();
+  }
   ResultSet homesSegment(String uuid, int segment) throws SQLException {
     _homesSegment.setString(1, uuid);
 

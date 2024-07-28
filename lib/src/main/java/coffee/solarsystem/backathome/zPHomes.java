@@ -505,8 +505,11 @@ public class zPHomes extends JavaPlugin {
       }
 
       ResultSet rs = prepared.homesSegment(uuid, page);
+      ResultSet amount = prepared.getHomesAmount(uuid);
 
-      player.sendMessage(ChatColor.BOLD + "Homes (Page " + (page + 1) + ") : ");
+      amount.next();
+      String pagezamount = (Integer.toString(amount.getInt(0)/PAGE_LENGTH));
+      player.sendMessage(ChatColor.BOLD + "Homes (Page " + (page + 1) + "/" + pagezamount + ")");
 
       int start = page * PAGE_LENGTH;
       for (int i = start; rs.next() && i < start + PAGE_LENGTH; i++) {
