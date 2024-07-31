@@ -24,7 +24,6 @@ repositories {
 }
 
 dependencies {
-    shadow 'org.bukkit:bukkit:1.15.2-R0.1-SNAPSHOT'
     shadow 'org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT'
     implementation 'org.apache.commons:commons-text:1.11.0'
     implementation name: 'spigot-api-1.20.4-R0.1'
