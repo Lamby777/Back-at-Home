@@ -508,7 +508,7 @@ public class zPHomes extends JavaPlugin {
       ResultSet amount = prepared.getHomesAmount(uuid);
 
       amount.next();
-      String pagezamount = (Integer.toString(amount.getInt(0)/PAGE_LENGTH));
+      String pagezamount = (Integer.toString((int) Math.ceil(((double) amount.getInt(1))/PAGE_LENGTH)));
       player.sendMessage(ChatColor.BOLD + "Homes (Page " + (page + 1) + "/" + pagezamount + ")");
 
       int start = page * PAGE_LENGTH;
